@@ -205,7 +205,11 @@ namespace Dynv6Updater
         {
             try
             {
+                _log.Info("Actualizando IP ....");
+
                 await _updaterService.UpdateIp();
+
+                _log.Info("IP actualizada");
             }
             catch (Exception ex)
             {
