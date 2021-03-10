@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" Codepage="1252" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+
+  <!-- personalizar para el instalador -->
+  <String Id="APPLICATION_NAME">Dynv6Updater</String>
+  <String Id="MANUFACTURER_NAME">David González Zornoza</String>
+  <String Id="PRODUCT_DESCRIPTION">Dynv6 IP update service</String>
+  <String Id="COMMENTS"></String>
+
+  <String Id="FEATURE_COMPLETE_DESCRIPTION">The complete package.</String>
+  <String Id="FEATURE_MAINPROGRAM_DESCRIPTION">The main version including all dependencies.</String>
+  <String Id="FEATURE_MAINPROGRAM_TITLE">Main program</String>
+  
+  
+  
+  
+  
+  <!-- LCID -->
+  <String Id="LANGUAGE">1033</String>
+  
+  <String Id="LICENSE_RTF" Overridable="yes">Eula.en-us.rtf</String>
+  
+  <String Id="APP_NOT_SUPPORTED">This application is is not supported on your current OS. Minimal OS supported is Windows 7</String>
+  <String Id="DOTNET_FRAMEWORK_NEEDED">This application requires .NET Framework 4.6. https://www.microsoft.com/es-es/download/details.aspx?id=48130</String>
+  <String Id="NEWER_VERSION_INSTALLED">A newer version of !(loc.APPLICATION_NAME) is already installed.</String>
+  <String Id="CLOSE_RUNNING_APP">!(loc.APPLICATION_NAME) is running. You need to close it first!</String>
+
+  <String Id="UPGRADE_WELCOME_DLG_TITLE">!(loc.APPLICATION_NAME) Setup</String>
+  <String Id="UPGRADE_WELCOME_DLG_HEADER_TITLE">A previous version of !(loc.APPLICATION_NAME) is detected</String>
+  <String Id="UPGRADE_WELCOME_DLG_MESSAGE">The setup will perform an upgrade of !(loc.APPLICATION_NAME). Click Next to proceed with the upgrade or Cancel to exit the setup.</String>
+
+  <String Id="CREATE_DESKTOP_SHORTCUT_CHECKBOX_TEXT">Create a shortcut on Desktop</String>
+  <String Id="CREATE_STARTMENU_SHORTCUT_CHECKBOX_TEXT">Create a shortcut on Start menu</String>
+  <String Id="OPEN_README_ON_FINISH">Open Readme on finish.</String>
+  
+</WixLocalization>
+
+  
+

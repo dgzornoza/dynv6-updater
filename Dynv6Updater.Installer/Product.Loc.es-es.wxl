@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="es-es" Codepage="1252" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+
+  <!-- TODO: personalizar para el instalador -->
+  <String Id="APPLICATION_NAME">Dynv6Updater</String>
+  <String Id="MANUFACTURER_NAME">David González Zornoza</String>
+  <String Id="PRODUCT_DESCRIPTION">Servicio para actualización de IP en Dynv6</String>
+  <String Id="COMMENTS">comments</String>
+  
+  <String Id="FEATURE_COMPLETE_DESCRIPTION">El paquete completo.</String>
+  <String Id="FEATURE_MAINPROGRAM_DESCRIPTION">La version principal incluyendo todas las dependencias.</String>
+  <String Id="FEATURE_MAINPROGRAM_TITLE">Programa principal</String>
+  
+  
+  
+  
+  
+  <!-- LCID -->
+  <String Id="LANGUAGE">1034</String>
+
+  <String Id="LICENSE_RTF" Overridable="yes">Eula.es-es.rtf</String>
+  
+  <String Id="APP_NOT_SUPPORTED">Esta aplicación no esta soportada para este SO. El SO mínimo es Windows 7</String>
+  <String Id="DOTNET_FRAMEWORK_NEEDED">Esta aplicación requiere .NET Framework 4.6. https://www.microsoft.com/es-es/download/details.aspx?id=48130</String>
+  <String Id="NEWER_VERSION_INSTALLED">Una nueva versión de !(loc.APPLICATION_NAME) ya está instalada.</String>
+  <String Id="CLOSE_RUNNING_APP">!(loc.APPLICATION_NAME) se esta ejecutando. Tiene que cerrarse para poder ejecutar el instalador!</String>
+
+  <String Id="UPGRADE_WELCOME_DLG_TITLE">Instalador !(loc.APPLICATION_NAME)</String>
+  <String Id="UPGRADE_WELCOME_DLG_HEADER_TITLE">Una versión anterior de !(loc.APPLICATION_NAME) ha sido detectada</String>
+  <String Id="UPGRADE_WELCOME_DLG_MESSAGE">La instalación realizará una actualizacion de !(loc.APPLICATION_NAME). Pulsa Siguiente para proceder con la actualización o Cancelar para salir de la instalación.</String>
+
+  <String Id="CREATE_DESKTOP_SHORTCUT_CHECKBOX_TEXT">Crear un acceso directo en el escritorio</String>
+  <String Id="CREATE_STARTMENU_SHORTCUT_CHECKBOX_TEXT">Crear un acceso directo en menu inicio</String>
+  <String Id="OPEN_README_ON_FINISH">Abrir documentación al finalizar.</String>
+  
+</WixLocalization>

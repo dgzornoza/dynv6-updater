@@ -1,0 +1,6 @@
+﻿Links a la documentacion de Wix:
+
+Sitio principal: http://wixtoolset.org/
+Variables a referencias de proyectos: http://wixtoolset.org/documentation/manual/v3/votive/votive_project_references.html
+Harvest Tool: http://wixtoolset.org/documentation/manual/v3/overview/heat.html
+Github source: https://github.com/wixtoolset/wix3

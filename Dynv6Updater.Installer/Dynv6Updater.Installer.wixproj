@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.9</ProductVersion>
+    <ProjectGuid>1525b452-6b3a-45e7-82e2-aed97641caf8</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>Dynv6Updater.Installer</OutputName>
+    <OutputType>Package</OutputType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Product.Files.wxs" />
+    <Compile Include="Product.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Docs\EULA.en-us.rtf" />
+    <Content Include="Docs\EULA.es-es.rtf" />
+    <Content Include="HarvestOutputFilter.xsl" />
+    <Content Include="Images\app.ico" />
+    <Content Include="Images\TopBanner.bmp" />
+    <Content Include="Images\Dialog.bmp" />
+    <Content Include="Product.Var.wxi" />
+    <None Include="WixLinks.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Product.Loc.es-es.wxl" />
+    <EmbeddedResource Include="Product.Loc.en-us.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Docs" />
+    <Folder Include="Images" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dynv6Updater\Dynv6Updater.csproj">
+      <Name>Dynv6Updater</Name>
+      <Project>{e24a7ab5-878f-4e88-a450-836ea7bcc8b3}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
+  <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
+    <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
+  </Target>
+  <!--
+	To modify your build process, add your task inside one of the targets below and uncomment it.
+	Other similar extension points exist, see Wix.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+  <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
+  <Target Name="Product_Var_wxi_AfterBuild" AfterTargets="AfterBuild" Condition="Exists('Product.$(Configuration).Var')">
+    <TransformXml Source="Product.Var.wxi" Destination="$(OutputPath)Product.Var" Transform="Product.$(Configuration).Var" />
+  </Target>
+  <PropertyGroup>
+    <PreBuildEvent>"%25WIX%25bin\heat.exe" dir "$(SolutionDir)Dynv6Updater/bin/$(ConfigurationName)" -cg InstallDir_group_comp -gg -scom -sreg -sfrag -srd -dr INSTALLDIR -var var.Dynv6Updater.TargetDir -t "../../HarvestOutputFilter.xsl" -out "../../Product.Files.wxs"</PreBuildEvent>
+  </PropertyGroup>
+</Project>

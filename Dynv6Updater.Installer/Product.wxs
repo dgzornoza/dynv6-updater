@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+  <!-- VARIABLES: Include defined variables -->
+  <?include Product.Var.wxi ?>
+
+
+  <!-- ////////////////////////////////////////////////////////////////////////////// -->
+  <!-- CONFIGURACION PRODUCTO (Configuracion general de la aplicacion a instalar) -->
+
+  <Product Id="$(var.ProductId)"
+         Name="!(loc.APPLICATION_NAME)"
+         Language="!(loc.LANGUAGE)"
+         Version="$(var.AppVersion)"
+         Manufacturer="!(loc.MANUFACTURER_NAME)"
+         UpgradeCode="$(var.GuidUpgradeCode)" >
+
+    <!-- Package IDs son validos para una version unica solamente - ellos son autogenerados por WIX -->
+    <!-- Siempre instalar por maquina!!! -->
+    <Package Id="*" InstallerVersion="400" Compressed="yes" InstallPrivileges="elevated" InstallScope="perMachine"  Description="!(loc.PRODUCT_DESCRIPTION)" Comments="!(loc.COMMENTS) $(var.AppVersion)" />
+
+    <!-- Definir iconos (el ID no debe superar 18 chars y debe terminar con ".exe" -->
+    <Icon Id="AppIcon.exe" SourceFile="$(var.AppIconSource)" />
+    <!-- Generar cabinet files necesarios para los medios -->
+    <MediaTemplate CabinetTemplate="cab{0}.cab" EmbedCab="yes" />
+
+
+
+    <!-- ////////////////////////////////////////////////////////////////////////////// -->
+    <!-- PREREQUISITOS -->
+
+    <!-- Framework 4.6 http://wixtoolset.org/documentation/manual/v3/customactions/wixnetfxextension.html -->
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_46_OR_LATER_INSTALLED"/>
+    <Condition Message="!(loc.DOTNET_FRAMEWORK_NEEDED)">
+      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_46_OR_LATER_INSTALLED]]>
+    </Condition>
+
+    <!-- Windows 7 o superior -->
+    <Condition Message="!(loc.APP_NOT_SUPPORTED)">
+      <![CDATA[Installed OR ((VersionNT >= 601) OR (VersionNT >= 601))]]>
+    </Condition>
+
+
+
+    <!-- ////////////////////////////////////////////////////////////////////////////// -->
+    <!-- CONFIGURACION INTERFACE USUARIO (Propiedades comunes de la interface de usuario standard del instalador) -->
+
+    <!-- Licencia: dummy. Texto real se establece en el archivo WXS -->
+    <WixVariable Id="WixUILicenseRtf" Value="dummy" />
+
+    <!-- Bitmaps de banners -->
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.ImageTopBannerSource)" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.ImageDialogSource)" />
+    <Binary Id="imageDialog" SourceFile="$(var.ImageDialogSource)" />
+
+
+    <!-- Propiedades para añadir/eliminar programas -->
+    <Property Id="ARPPRODUCTICON" Value="AppIcon.exe" />
+    <Property Id="ARPHELPLINK" Value="$(var.InfoURL)" />
+
+    <!-- Eliminar/reparar -->
+    <!--<Property Id="ARPNOREPAIR" Value="yes" Secure="yes" />-->
+    <!-- Eliminar/modificar -->
+    <!--<Property Id="ARPNOMODIFY" Value="yes" Secure="yes" />-->
+
+    <!-- Directorio de instalacion -->
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+
+    <!-- Referencia a la imagen del dialogo -->
+    <Property Id="DialogBitmap" Value="imageDialog" />
+
+    <!-- Determinar el directorio de una instalacion anterior (si existe). Si no, INSTALLDIR estara vacio -->
+    <Property Id="INSTALLDIR">
+      <RegistrySearch Id="DetermineInstallLocation" Type="raw" Root="HKLM" Key="Software\!(loc.MANUFACTURER_NAME)\InstalledProducts\!(loc.APPLICATION_NAME)" Name="InstallLocation" />
+    </Property>
+
+    <!-- Propiedades para dialogos -->
+    <Property Id="UpgradeDlgHasShown" Value="0" />
+    <Property Id="ADD_DESKTOP_SHORTCUT" Secure="yes">$(var.DefaultDesktopShortCutsValue)</Property>
+    <Property Id="ADD_STARTMENU_SHORTCUT" Secure="yes" >$(var.DefaultStartMenuShortCutsValue)</Property>
+    <Property Id="SHOW_DESKTOP_SHORTCUT_CHECK" Secure="yes" >$(var.IncludeDesktopShortCuts)</Property>
+    <Property Id="SHOW_STARTMENU_SHORTCUT_CHECK" Secure="yes" >$(var.IncludeStartMenuShortCuts)</Property>
+
+
+    
+    
+    <!-- ////////////////////////////////////////////////////////////////////////////// -->
+    <!-- SECUENCIAS (Configuracion de las secuencias de instalacion/actualizacion) -->
+
+    <!-- Configurar propiedad ARPINSTALLLOCATION (http://blogs.technet.com/b/alexshev/archive/2008/02/09/from-msi-to-wix-part-2.aspx) -->
+    <CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[INSTALLDIR]" />
+    <!-- Guardar el valor del comando INSTALLDIR, almacenar y restaurarlo despues en la secuencio o este sera sobreescrito por el valor guardado en el registro durante la actualizacion -->
+    <!-- http://robmensching.com/blog/posts/2010/5/2/the-wix-toolsets-remember-property-pattern/ -->
+    <CustomAction Id='SaveCmdLineValueINSTALLDIR' Property='CMDLINE_INSTALLDIR' Value='[INSTALLDIR]' Execute='firstSequence' />
+    <CustomAction Id='SetFromCmdLineValueINSTALLDIR' Property='INSTALLDIR' Value='[CMDLINE_INSTALLDIR]' Execute='firstSequence' />
+    <CustomAction Id="NewerVersionFound" Error="!(loc.NEWER_VERSION_INSTALLED)" />
+
+    <!-- Accion para mostrar archivo 'readme' tras finalizar la instalacion -->
+    <Property Id="WixShellExecTarget" Value="[#readme_component_file]" />
+    <CustomAction Id="LaunchFile" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+
+
+    <!-- Configuracion actualizacion de version -->
+    <Upgrade Id="$(var.GuidUpgradeCode)">
+      <UpgradeVersion OnlyDetect="yes" Minimum="$(var.AppVersion)" IncludeMinimum="no" Property="NEWER_VERSION_FOUND" />
+      <UpgradeVersion Minimum="0.0.0.0" IncludeMinimum="yes" Maximum="$(var.AppVersion)" IncludeMaximum="no" Property="OLDER_VERSION_FOUND" />
+    </Upgrade>
+
+
+    <!-- Secuencia UI -->
+    <InstallUISequence>
+      <!-- Verificar una nueva version con FindRelatedProducts y ejecutar la accion personalizada despues -->
+      <Custom Action="NewerVersionFound" After="FindRelatedProducts">
+        <![CDATA[NEWER_VERSION_FOUND]]>
+      </Custom>
+      <Custom Action='SaveCmdLineValueINSTALLDIR' Before='AppSearch' />
+      <Custom Action='SetFromCmdLineValueINSTALLDIR' After='AppSearch'>CMDLINE_INSTALLDIR</Custom>
+    </InstallUISequence>
+
+
+    <!-- Principal secuencia de instalacion que se ejecuta cuando el producto esta realmente instalado -->
+    <InstallExecuteSequence>
+      <!-- Verificar una nueva version con FindRelatedProducts y ejecutar la accion personalizada despues -->
+      <Custom Action="NewerVersionFound" After="FindRelatedProducts">
+        <![CDATA[NEWER_VERSION_FOUND]]>
+      </Custom>
+      <!-- Eliminar version anterior del producto -->
+      <RemoveExistingProducts After="InstallInitialize"/>
+      <!-- WixCloseApplications es una accion de WIX que usa util:CloseApplication internamente -->
+      <Custom Action="WixCloseApplications" Before="InstallInitialize" />
+      <!-- Determinar la ubicación de instalacion despues de que el instalador haya validado la ruta de instalación -->
+      <Custom Action="SetARPINSTALLLOCATION" After="InstallValidate"></Custom>
+      <Custom Action='SaveCmdLineValueINSTALLDIR' Before='AppSearch' />
+      <Custom Action='SetFromCmdLineValueINSTALLDIR' After='AppSearch'>CMDLINE_INSTALLDIR</Custom>
+
+    </InstallExecuteSequence>
+
+    <!-- Esto le pedirá al usuario que cierre la aplicación si se está ejecutando durante la actualización -->
+    <util:CloseApplication Id="CloseApp" CloseMessage="no" Description="!(loc.CLOSE_RUNNING_APP)" ElevatedCloseMessage="no" RebootPrompt="no" Target="$(var.TargetAppExeName)" />
+
+
+
+
+    <!-- ////////////////////////////////////////////////////////////////////////////// -->
+    <!-- RUTAS INSTALACION (directorios de instalacion, entradas de registros, accesos directos, ...) -->
+
+    <!-- Carpeta externa. -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+
+      <!-- Comenzar construyendo la estructura de directorio aqui.  -->
+      <!-- "ProgramFilesFolder" es una variable conteniendo el path absoluto. -->
+      <!-- Para ver una lista de variables de carpetas, see: http://msdn.microsoft.com/en-us/library/aa372057%28VS.85%29.aspx -->
+      <Directory Id="$(var.PlatformProgramFilesFolder)">
+        <!-- Todas las carpetas desde aqui son relativas a su padre. -->
+        <Directory Id="MyProgramFiles" Name="!(loc.MANUFACTURER_NAME)">
+          <!-- INSTALLDIR es un nombre de propiedad. se necesita posteriormente para el UI (para poder cambiar el directorio de instalacion). -->
+          <Directory Id="INSTALLDIR" Name="!(loc.APPLICATION_NAME)">
+            <!-- Carpeta para logs, posteriormente se estableceran permisos -->
+            <Directory Id="logFolder" Name="logs" />
+          </Directory>
+        </Directory>
+      </Directory>
+
+      <!-- Entradas de registro -->
+      <Component Id="RegValInstallLocation_comp" Guid="$(var.GuidInstallLocation)">
+        <!-- NO usar la clave de registro predeterminada de la aplicación aqui, porque esta clave se eliminara al desinstalar
+                 (importante al instalar una versión más nueva, porque sera una desinstalacion seguida de instalacion) -->
+        <RegistryKey Root="HKLM" Key="Software\!(loc.MANUFACTURER_NAME)\InstalledProducts\!(loc.APPLICATION_NAME)">
+          <RegistryValue Name="InstallLocation" Value="[INSTALLDIR]" Type="string" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+
+      <!-- Accesos directos -->
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="!(loc.APPLICATION_NAME)" />
+      </Directory>
+      <Directory Id="DesktopFolder" Name="Desktop"></Directory>
+
+    </Directory>
+
+    <!-- componentes para accesos directos -->
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcutStartMenu_comp" Guid="$(var.GuidApplicationShortcut)">
+        <Shortcut Id="ApplicationStartMenuShortcut" Name="!(loc.APPLICATION_NAME)" Description="!(loc.PRODUCT_DESCRIPTION)" Target="[INSTALLDIR]$(var.TargetAppExeName)" WorkingDirectory="INSTALLFOLDER" >
+          <Icon Id="ApplicationStartMenuShortcutIcon" SourceFile="$(var.AppIconSource)" />
+        </Shortcut>
+        <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\!(loc.MANUFACTURER_NAME)\InstalledProducts\!(loc.APPLICATION_NAME)" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+        <Condition>ADD_STARTMENU_SHORTCUT</Condition>
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="ApplicationShortcutDesktop_comp" Guid="$(var.GuidApplicationShortcutDesktop)">
+        <Shortcut Id="ApplicationDesktopShortcut" Name="!(loc.APPLICATION_NAME)" Description="!(loc.PRODUCT_DESCRIPTION)" Target="[INSTALLDIR]$(var.TargetAppExeName)" WorkingDirectory="INSTALLFOLDER" >
+          <Icon Id="ApplicationDesktopShortcutIcon" SourceFile="$(var.AppIconSource)" />
+        </Shortcut>
+        <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\!(loc.MANUFACTURER_NAME)\InstalledProducts\!(loc.APPLICATION_NAME)" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+        <Condition>ADD_DESKTOP_SHORTCUT</Condition>
+      </Component>
+    </DirectoryRef>
+
+    <!-- Permisos de la carpeta de logs -->
+    <DirectoryRef Id="logFolder">
+      <Component Id="LogsPermission_comp" Guid="$(var.GuidLogsPermission)">
+        <CreateFolder>
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </CreateFolder>
+      </Component>
+    </DirectoryRef>
+
+    <!-- Archivos copiados manualmente para tener sus referencias  -->
+    <ComponentGroup Id="PrimaryExe_group_comp" Directory="INSTALLDIR">
+      <!-- aplicacion principal y configuracion -->
+      <Component Id="primaryexe_config_component">
+        <File Id="primaryexe_config_component_file" KeyPath="yes" Name="$(var.TargetAppExeName).config" Source="$(var.TargetProjectDir)"></File>
+      </Component>
+      <Component Id="primaryexe_component">
+        <File Id="primaryexe_component_file" KeyPath="yes" Name="$(var.TargetAppExeName)" Source="$(var.TargetProjectDir)" />
+
+        <!-- ### Instalar servicio windows si esta indicado ### -->
+        <?if $(var.IsWin32Service) = "1" ?>
+        <ServiceInstall Id="svc15004356FE7CC543DB30277EBA335A30"
+                Type="ownProcess"
+                Vital="yes"
+                Name="!(loc.APPLICATION_NAME)"
+                DisplayName="!(loc.APPLICATION_NAME)"
+                Description="!(loc.PRODUCT_DESCRIPTION)"
+                ErrorControl="ignore"
+                Account="NT AUTHORITY\LocalService"
+                Start="demand"
+                Interactive="no">
+        </ServiceInstall>
+        <ServiceControl Id="ctrl15004356FE7CC543DB30277EBA335A30" Stop="both" Remove="uninstall" Name="!(loc.APPLICATION_NAME)" Wait="yes" />
+        <?endif?>
+       
+      </Component>
+
+      <!-- documentacion instalacion -->
+      <Component Id="readme_component">
+        <File Id="readme_component_file" KeyPath="yes" Name="Readme.rtf" Source="$(var.TargetProjectDir)Docs\"></File>
+      </Component>
+
+    </ComponentGroup>
+
+
+
+    <!-- ////////////////////////////////////////////////////////////////////////////// -->
+    <!-- FEATURES (definen que partes de la aplicacion pueden ser instaladas en una instalacion personalizada). -->
+
+    <!-- Las características definen que partes de la aplicacion se pueden instalar en una instalacion personalizada -->
+    <Feature Id="Complete" Title="!(loc.APPLICATION_NAME)" Description="!(loc.FEATURE_COMPLETE_DESCRIPTION)" Display="expand" Level="1" ConfigurableDirectory="INSTALLDIR">
+      <!-- Un bloque de características para el programa principal (GUI) y todas sus dependencias -->
+      <Feature Id="MainProgram" Title="!(loc.FEATURE_MAINPROGRAM_TITLE)" Description="!(loc.FEATURE_MAINPROGRAM_DESCRIPTION)" Level="1">
+        <!-- Archivos de instalacion: Generados automaticamente por heat.exe (añadido comando en evento pre-build) -->
+        <ComponentGroupRef Id="InstallDir_group_comp" />
+        <!-- Ejecutable añadido manualmente (para poder usar el mismo numero de version en el instalador) -->
+        <ComponentGroupRef Id="PrimaryExe_group_comp" />
+        <!-- Registrar entradas -->
+        <ComponentRef Id="RegValInstallLocation_comp" />
+        <!-- accesos directos -->
+        <ComponentRef Id="ApplicationShortcutStartMenu_comp" />
+        <ComponentRef Id="ApplicationShortcutDesktop_comp" />
+        <!-- directorio logs -->
+        <ComponentRef Id="LogsPermission_comp" />
+      </Feature>
+    </Feature>
+
+
+
+
+
+    <!-- ////////////////////////////////////////////////////////////////////////////// -->
+    <!-- UI (Seccion con la interface personalizada del instalador). -->
+    <!-- https://github.com/wixtoolset/wix3/tree/develop/src/ext/UIExtension/wixlib -->
+
+    
+
+    <UI Id="CustomWixUI">
+
+      <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+      <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+      <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+
+      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+      <Property Id="WixUI_Mode" Value="InstallDir" />
+      <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="!(loc.OPEN_README_ON_FINISH)" />
+      <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
+      
+      
+      <DialogRef Id="BrowseDlg" />
+      <DialogRef Id="DiskCostDlg" />
+      <DialogRef Id="ErrorDlg" />
+      <DialogRef Id="ExitDialog" />
+      <DialogRef Id="FatalError" />
+      <DialogRef Id="FilesInUse" />
+      <DialogRef Id="MsiRMFilesInUse" />
+      <DialogRef Id="PrepareDlg" />
+      <DialogRef Id="ProgressDlg" />
+      <DialogRef Id="ResumeDlg" />
+      <DialogRef Id="UserExit" />
+
+      <!-- Dialogo Licencia-->
+      <Dialog Id="CustomLicenseAgreementDlg" Width="370" Height="270" Title="!(loc.LicenseAgreementDlg_Title)">
+        <Control Id="LicenseAcceptedCheckBox" Type="CheckBox" X="20" Y="207" Width="330" Height="18" CheckBoxValue="1" Property="LicenseAccepted" Text="!(loc.LicenseAgreementDlgLicenseAcceptedCheckBox)" />
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
+          <Publish Event="SpawnWaitDialog" Value="WaitForCostingDlg">CostingComplete = 1</Publish>
+          <Condition Action="disable">
+            <![CDATA[LicenseAccepted <> "1"]]>
+          </Condition>
+          <Condition Action="enable">LicenseAccepted = "1"</Condition>
+        </Control>
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.LicenseAgreementDlgBannerBitmap)" />
+        <Control Id="LicenseText" Type="ScrollableText" X="20" Y="60" Width="330" Height="140" Sunken="yes" TabSkip="no">
+          <!-- This is the original line -->
+          <!--<Text SourceFile="!(wix.WixUILicenseRtf=$(var.LicenseRtf))" />-->
+          <!-- To enable EULA localization we change it to this: -->
+          <Text SourceFile="$(var.DocsDir)\!(loc.LICENSE_RTF)" />
+          <!-- In each of the localization files (wxl) put a line like this:
+            <String Id="LicenseRtf" Overridable="yes">EULA_en-us.rtf</String>-->
+        </Control>
+        <Control Id="Print" Type="PushButton" X="112" Y="243" Width="56" Height="17" Text="!(loc.WixUIPrint)">
+          <Publish Event="DoAction" Value="WixUIPrintEula">1</Publish>
+        </Control>
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="340" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.LicenseAgreementDlgDescription)" />
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.LicenseAgreementDlgTitle)" />
+      </Dialog>
+
+      <!-- Dialogo actualizacion -->
+      <Dialog Id="CustomUpgradeDlg" Width="370" Height="270" Title="!(loc.UPGRADE_WELCOME_DLG_TITLE)" NoMinimize="yes">
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Disabled="yes" Text="!(loc.WixUIBack)">
+          <Publish Event="NewDialog" Value="WelcomeDlg">1</Publish>
+        </Control>
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
+          <Publish Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+          <Publish Property="UpgradeDlgHasShown" Value="1">1</Publish>
+        </Control>
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+        <Control Id="Bitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="234" TabSkip="no" Text="[DialogBitmap]" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="374" Height="0" />
+        <Control Id="Description" Type="Text" X="135" Y="70" Width="220" Height="30" Transparent="yes" NoPrefix="yes">
+          <Text>!(loc.UPGRADE_WELCOME_DLG_MESSAGE)</Text>
+        </Control>
+        <Control Id="Title" Type="Text" X="135" Y="20" Width="220" Height="60" Transparent="yes" NoPrefix="yes">
+          <Text>{\WixUI_Font_Bigger}!(loc.UPGRADE_WELCOME_DLG_HEADER_TITLE)</Text>
+        </Control>
+      </Dialog>
+
+      <!-- Dialogo personalizacion componentes -->
+      <Dialog Id="CustomInstallDirDlg" Width="370" Height="270" Title="!(loc.InstallDirDlg_Title)">
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)" />
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.InstallDirDlgDescription)" />
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.InstallDirDlgTitle)" />
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+
+        <Control Id="FolderLabel" Type="Text" X="20" Y="60" Width="290" Height="30" NoPrefix="yes" Text="!(loc.InstallDirDlgFolderLabel)" />
+        <Control Id="Folder" Type="PathEdit" X="20" Y="100" Width="320" Height="18" Property="WIXUI_INSTALLDIR" Indirect="yes" />
+        <Control Id="ChangeFolder" Type="PushButton" X="20" Y="120" Width="56" Height="17" Text="!(loc.InstallDirDlgChange)" />
+
+        <!-- condicion para permitir incluir accesos directos -->
+        <Control Id="StartMenuShortcutCheckBox" Type="CheckBox" X="20" Y="160" Width="290" Height="17" Property="ADD_STARTMENU_SHORTCUT" CheckBoxValue="1" Text="!(loc.CREATE_STARTMENU_SHORTCUT_CHECKBOX_TEXT)" >
+          <Condition Action="hide"> <![CDATA[SHOW_STARTMENU_SHORTCUT_CHECK <> "1"]]></Condition>
+        </Control>
+        <Control Id="DesktopShortcutCheckBox" Type="CheckBox" X="20" Y="180" Width="290" Height="17" Property="ADD_DESKTOP_SHORTCUT" CheckBoxValue="1" Text="!(loc.CREATE_DESKTOP_SHORTCUT_CHECKBOX_TEXT)" >
+          <Condition Action="hide"> <![CDATA[SHOW_DESKTOP_SHORTCUT_CHECK <> "1"]]></Condition>
+        </Control>
+
+      </Dialog>
+
+
+
+
+      <!-- Flujo dialogos -->
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="CustomLicenseAgreementDlg">NOT Installed</Publish>
+      <!--<Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">(Installed AND PATCH) OR WIX_UPGRADE_DETECTED</Publish>-->
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="CustomUpgradeDlg">(Installed AND PATCH) OR OLDER_VERSION_FOUND</Publish>
+
+      <Publish Dialog="CustomLicenseAgreementDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+      <Publish Dialog="CustomLicenseAgreementDlg" Control="Next" Event="NewDialog" Value="CustomInstallDirDlg">LicenseAccepted = "1"</Publish>
+      <Publish Dialog="CustomInstallDirDlg" Control="Back" Event="NewDialog" Value="CustomLicenseAgreementDlg">1</Publish>
+      <Publish Dialog="CustomInstallDirDlg" Control="Next" Event="SetTargetPath" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="CustomInstallDirDlg" Control="Next" Event="DoAction" Value="WixUIValidatePath" Order="2">NOT WIXUI_DONTVALIDATEPATH</Publish>
+      <Publish Dialog="CustomInstallDirDlg" Control="Next" Event="SpawnDialog" Value="InvalidDirDlg" Order="3">
+        <![CDATA[NOT WIXUI_DONTVALIDATEPATH AND WIXUI_INSTALLDIR_VALID<>"1"]]>
+      </Publish>
+      <Publish Dialog="CustomInstallDirDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
+      <Publish Dialog="CustomInstallDirDlg" Control="ChangeFolder" Property="_BrowseProperty" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+      <Publish Dialog="CustomInstallDirDlg" Control="ChangeFolder" Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
+      <Publish Dialog="CustomInstallDirDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="BrowseDlg" Control="OK" Event="DoAction" Value="WixUIValidatePath" Order="3">1</Publish>
+      <Publish Dialog="BrowseDlg" Control="OK" Event="SpawnDialog" Value="InvalidDirDlg" Order="4">
+        <![CDATA[WIXUI_INSTALLDIR_VALID<>"1"]]>
+      </Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomInstallDirDlg" Order="1">NOT Installed</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="2">Installed</Publish>
+
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomUpgradeDlg" Order="2">UpgradeDlgHasShown = "1"</Publish>
+
+      <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchFile">WIXUI_EXITDIALOGOPTIONALCHECKBOX = "1" and NOT Installed</Publish>
+      <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+    </UI>
+
+    
+    <UIRef Id="WixUI_Common" />
+
+  </Product>
+
+</Wix>

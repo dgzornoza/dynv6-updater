@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31105.61
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{1934D5D1-F3CE-4705-B555-563B07D8C455}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Dynv6Updater.Installer", "Dynv6Updater.Installer\Dynv6Updater.Installer.wixproj", "{1525B452-6B3A-45E7-82E2-AED97641CAF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynv6Updater", "Dynv6Updater\Dynv6Updater.csproj", "{E24A7AB5-878F-4E88-A450-836EA7BCC8B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynv6Updater.Services", "Dynv6Updater.Services\Dynv6Updater.Services.csproj", "{828D91F6-A870-4873-A5BF-AB4562E3FB59}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows", "Windows", "{6840DDE9-46A1-43B4-8ABB-E564B507839E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1525B452-6B3A-45E7-82E2-AED97641CAF8}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{1525B452-6B3A-45E7-82E2-AED97641CAF8}.Debug|x86.ActiveCfg = Debug|x86
+		{1525B452-6B3A-45E7-82E2-AED97641CAF8}.Debug|x86.Build.0 = Debug|x86
+		{1525B452-6B3A-45E7-82E2-AED97641CAF8}.Release|Any CPU.ActiveCfg = Release|x86
+		{1525B452-6B3A-45E7-82E2-AED97641CAF8}.Release|x86.ActiveCfg = Release|x86
+		{1525B452-6B3A-45E7-82E2-AED97641CAF8}.Release|x86.Build.0 = Release|x86
+		{E24A7AB5-878F-4E88-A450-836EA7BCC8B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E24A7AB5-878F-4E88-A450-836EA7BCC8B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E24A7AB5-878F-4E88-A450-836EA7BCC8B3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E24A7AB5-878F-4E88-A450-836EA7BCC8B3}.Debug|x86.Build.0 = Debug|Any CPU
+		{E24A7AB5-878F-4E88-A450-836EA7BCC8B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E24A7AB5-878F-4E88-A450-836EA7BCC8B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E24A7AB5-878F-4E88-A450-836EA7BCC8B3}.Release|x86.ActiveCfg = Release|Any CPU
+		{E24A7AB5-878F-4E88-A450-836EA7BCC8B3}.Release|x86.Build.0 = Release|Any CPU
+		{828D91F6-A870-4873-A5BF-AB4562E3FB59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{828D91F6-A870-4873-A5BF-AB4562E3FB59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{828D91F6-A870-4873-A5BF-AB4562E3FB59}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{828D91F6-A870-4873-A5BF-AB4562E3FB59}.Debug|x86.Build.0 = Debug|Any CPU
+		{828D91F6-A870-4873-A5BF-AB4562E3FB59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{828D91F6-A870-4873-A5BF-AB4562E3FB59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{828D91F6-A870-4873-A5BF-AB4562E3FB59}.Release|x86.ActiveCfg = Release|Any CPU
+		{828D91F6-A870-4873-A5BF-AB4562E3FB59}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1525B452-6B3A-45E7-82E2-AED97641CAF8} = {6840DDE9-46A1-43B4-8ABB-E564B507839E}
+		{E24A7AB5-878F-4E88-A450-836EA7BCC8B3} = {6840DDE9-46A1-43B4-8ABB-E564B507839E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {049B1712-0EFF-4E64-B02A-A73C51D25389}
+	EndGlobalSection
+EndGlobal

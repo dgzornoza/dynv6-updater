@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  
+  
+  <!-- ### TODO: VARIABLES DEFINIDAS POR USUARIO ### -->  
+  <!-- Establecer a 1 si se quiere activar una actualizacion mayor (cuando exista una version con alguna X superior 'X.X.X.0') -->
+  <?define EnableMajorUpgrade="" ?>
+  <!-- Url informacion -->
+  <?define InfoURL="https://github.com/dgzornoza" ?>
+  <!-- Si la aplicacion soporta ambas plataformas (x86 & x64), se tiene que crear un separado MSI o añadir archivos de transformacion de configuracion . -->
+  <?define Platform="x86" ?>
+  
+  <!-- Flags (true => "1", false => dejar vacio)-->
+  <?define IncludeDesktopShortCuts="" ?>
+  <?define DefaultDesktopShortCutsValue="" ?>
+  <?define IncludeStartMenuShortCuts="" ?>  
+  <?define DefaultStartMenuShortCutsValue="" ?>
+  
+  <?define IsWin32Service="1" ?>
+ 
+  <!-- ### END VARIABLES DEFINIDAS POR USUARIO ### -->
+
+
+
+
+  <!-- Projecto que se quiere instalar -->
+  <?define TargetAppExeName="Dynv6Updater.exe" ?>
+  <?define TargetProjectDir = "$(var.Dynv6Updater.TargetDir)" ?>
+  <!-- Numero de version obtenido del ensamblado principal -->
+  <?define AppVersion = "!(bind.fileVersion.primaryexe_component_file)" ?>
+  
+  <!-- GUIDs Modificar SOLO la primera vez al crear el instalador -->
+  <?define GuidInstallLocation="3F638FF4-C84D-480F-83B8-31CCE0C10617" ?>
+  <?define GuidLogsPermission="C9EBB53D-26D5-41A6-9493-0B50B71BAAAD" ?>  
+  <?define GuidApplicationShortcut="433B5301-96B9-4FD4-BD86-2A54FB5B9570" ?>
+  <?define GuidApplicationShortcutDesktop="00EA4184-52A8-478D-8A89-47892454B0DD" ?>
+  <?define GuidProductId="5836A526-5535-4DEB-BB56-B4D84BA96E38" ?>
+  <?define GuidUpgradeCode = "db1655a5-cb6d-4028-9dec-baa0152a11d3" ?>
+
+  
+  <!-- DOCUMENTOS -->
+  <?define DocsDir = "$(var.ProjectDir)\Docs" ?>
+  
+  
+  <!-- IMAGENES INSTALADOR -->
+  <!-- http://wixtoolset.org/documentation/manual/v3/wixui/wixui_customizations.html -->
+  <!-- Icono de aplicacion -->
+  <?define AppIconSource="Images\app.ico" ?>    
+  <!-- TopBanner.bmp: 493x58 px -->
+  <?define ImageTopBannerSource="Images\TopBanner.bmp" ?>
+  <!-- Dialog.bmp: 493x312 px; Area grafica: 164x3012 px -->
+  <?define ImageDialogSource="Images\Dialog.bmp" ?>
+  
+  
+  <!-- #### NO MODIFICAR NADA EN ESTAS LINEAS #### -->
+  <?if $(var.EnableMajorUpgrade) = 1 ?>
+  <?define ProductId = "*" ?>
+  <?else ?>
+  <?define ProductId = "$(var.GuidProductId)" ?>
+  <?endif ?>
+  
+  <?if $(var.Platform) = x64 ?>
+  <?define Win64 = "yes" ?>
+  <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+  <?define MainExeSourcePath = "$(var.ProjectDir)\$(var.AppExeName)" ?>
+  <?else ?>
+  <?define Win64 = "no" ?>
+  <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+  <?define MainExeSourcePath = "$(var.ProjectDir)\$(var.TargetAppExeName)" ?>
+  <?endif ?>
+
+</Include>
