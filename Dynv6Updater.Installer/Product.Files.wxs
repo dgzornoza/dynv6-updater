@@ -2,76 +2,76 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="INSTALLDIR">
-            <Component Id="cmp3519B0229053CBCBBB3FAE0B2767B106" Guid="{937AE0B2-96F4-499C-A1B2-DC93B4EC2127}">
+            <Component Id="cmp3519B0229053CBCBBB3FAE0B2767B106" Guid="{36923F87-8C4B-4EA0-8064-1BA930F0505B}">
                 <File Id="fil769E2F027CBE4D50DF2F2D09485B75AE" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Dynv6Updater.pdb" />
             </Component>
-            <Component Id="cmpFD9B20C80200FA1D9FA03B6CC7447963" Guid="{FF54D936-EF69-44ED-926A-3E487DB3FB64}">
+            <Component Id="cmpFD9B20C80200FA1D9FA03B6CC7447963" Guid="{57C700FC-AE01-47F6-B9F3-5D06178CD6E1}">
                 <File Id="fil6E606B36C6668E771AACD0788AD99C3D" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Dynv6Updater.Services.dll" />
             </Component>
-            <Component Id="cmp46A20BE20138F91D2C88B3C31EF63DB0" Guid="{54F04230-8866-4233-9403-5C92C17132B6}">
+            <Component Id="cmp46A20BE20138F91D2C88B3C31EF63DB0" Guid="{999DC6E7-40FF-4195-9042-0CFC7F1B5AE6}">
                 <File Id="filA07A797B8BAB9B26F552DD327557F3CD" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Dynv6Updater.Services.pdb" />
             </Component>
-            <Component Id="cmp13D6573EA8CF3F99F44BAE837E2771F0" Guid="{D7D8F97C-2A3F-4357-A8E4-B3D8D1B370D4}">
+            <Component Id="cmp13D6573EA8CF3F99F44BAE837E2771F0" Guid="{12E5B9F7-917F-40E4-955E-AEC240F9F3B2}">
                 <File Id="fil2991F53D601CDF7142D0A9E1B42E116E" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\log4net.dll" />
             </Component>
-            <Component Id="cmp01E20E7E5B034CCFC702911F4CB8D8D3" Guid="{10549BC0-75BB-412D-AA3C-62567484DCB7}">
+            <Component Id="cmp01E20E7E5B034CCFC702911F4CB8D8D3" Guid="{863D0659-657C-43D5-8F00-902B53F496D5}">
                 <File Id="filB985A413DD2217836B18C18553E7FDF4" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\log4net.xml" />
             </Component>
-            <Component Id="cmpBED9022C9CD94A23E72B0D422CCAEEC6" Guid="{69C8ECB5-BE6C-4A09-8DB8-E3D0DB68580E}">
+            <Component Id="cmpBED9022C9CD94A23E72B0D422CCAEEC6" Guid="{DEBE80CF-E185-476F-AEFF-58C30C78D000}">
                 <File Id="fil2108D83F82D55B49D8103E27D77BDFDE" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
             </Component>
-            <Component Id="cmpFEB0ACEB01B784D611C5A71B6EBF414A" Guid="{19ADF743-E200-4E66-B2A0-A517E16D95C2}">
+            <Component Id="cmpFEB0ACEB01B784D611C5A71B6EBF414A" Guid="{9B6E5E56-52D9-4D40-A7EC-B9B9F3E3560C}">
                 <File Id="fil6AD3D89D1734E1E69F9B76C0CBBD67ED" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Microsoft.Extensions.DependencyInjection.Abstractions.xml" />
             </Component>
-            <Component Id="cmp4608CA2FC66F221E808AF3FD03F56DEA" Guid="{900CC1F1-D0DB-4176-AA9C-B2FED8418315}">
+            <Component Id="cmp4608CA2FC66F221E808AF3FD03F56DEA" Guid="{0DFC2045-D482-4697-9007-46FDC1914E2C}">
                 <File Id="fil29944CE24D2F4CE317941BCDFA8B5FE3" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Microsoft.Extensions.Options.dll" />
             </Component>
-            <Component Id="cmpB015E2884DF3C58B8E2A9F2CC5E9F664" Guid="{7A54C344-2B8E-4BED-8707-B53A158992C9}">
+            <Component Id="cmpB015E2884DF3C58B8E2A9F2CC5E9F664" Guid="{720EE171-A36A-4BBB-AAC2-935FA06274D2}">
                 <File Id="fil37DF235338158E234C19CA166894CC0A" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Microsoft.Extensions.Options.xml" />
             </Component>
-            <Component Id="cmpA57E038D78392C02DC9072B9436713ED" Guid="{DBFD4F46-F033-4D10-8293-6FEAF9E933F2}">
+            <Component Id="cmpA57E038D78392C02DC9072B9436713ED" Guid="{2A0BB7D4-E062-4432-8F1F-044EDBF6C6E7}">
                 <File Id="fil101327A254DDD17E94E9880E128F3819" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Microsoft.Extensions.Primitives.dll" />
             </Component>
-            <Component Id="cmp2535FA328FC7590DD0E192158EAE0461" Guid="{B6A3FFFD-147D-41C6-AA86-A2883C43A347}">
+            <Component Id="cmp2535FA328FC7590DD0E192158EAE0461" Guid="{7A660A9A-A5A5-4F0C-8315-5482F56AF244}">
                 <File Id="filCE16B21FADC95327E8561DAECD528296" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Microsoft.Extensions.Primitives.xml" />
             </Component>
-            <Component Id="cmp73085246C202ABD1D96D2E5DEFB2A801" Guid="{822F8F30-F55E-4AB5-B22F-584A0C6A43A5}">
+            <Component Id="cmp73085246C202ABD1D96D2E5DEFB2A801" Guid="{993FC634-FC90-4E94-BFB8-B00578B9DD88}">
                 <File Id="filEDD81E77BF6933BF90C42AE0EFAA681B" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\System.Buffers.dll" />
             </Component>
-            <Component Id="cmpC61D92079BFCF768B1E7A0D7E407CB3A" Guid="{7BEF831E-1939-427B-8873-13832E3C1D5F}">
+            <Component Id="cmpC61D92079BFCF768B1E7A0D7E407CB3A" Guid="{C93D976F-A2B2-4E1D-86C2-26BBFFEA02AE}">
                 <File Id="fil3BDFF230BEF7868B8CC234ED1DA5BB02" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\System.Buffers.xml" />
             </Component>
-            <Component Id="cmp4CFC7C3721FFD91FA4E9798A516D5E97" Guid="{6920C4AD-A564-438F-B638-ED69E036F1F7}">
+            <Component Id="cmp4CFC7C3721FFD91FA4E9798A516D5E97" Guid="{C370F6D2-4422-440A-9FFD-25E0CA623B9B}">
                 <File Id="fil1E24D2F3B531B1D76E1631314436BD58" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\System.Memory.dll" />
             </Component>
-            <Component Id="cmpD8437A6E303F087EBDD502EC5471B956" Guid="{034A8AE6-720F-4FFA-A0F6-7D2B2FC72065}">
+            <Component Id="cmpD8437A6E303F087EBDD502EC5471B956" Guid="{AFA76AD0-962F-44C0-804D-C988CFB3B28A}">
                 <File Id="fil0AC3D1AA9CCBEFC86FD08406E1BC25A8" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\System.Memory.xml" />
             </Component>
-            <Component Id="cmpA780BD9CC7EF10DE58A9E17B691B0205" Guid="{98F3F693-B404-4F76-9EA5-A724398BB934}">
+            <Component Id="cmpA780BD9CC7EF10DE58A9E17B691B0205" Guid="{EC218A28-FD82-45E9-A310-986CEDCBA34A}">
                 <File Id="fil41D7AC86F0924A477EE48B3AF9E39249" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\System.Numerics.Vectors.dll" />
             </Component>
-            <Component Id="cmp89E1550D8A5D18EBAADA98A8B268D834" Guid="{A76B2CAE-D748-4A7C-84E4-3EB49A6AC13A}">
+            <Component Id="cmp89E1550D8A5D18EBAADA98A8B268D834" Guid="{402165DF-0245-443F-9743-805F18BF0CD5}">
                 <File Id="filFF3AF6907FD4EEFAE0A0AD6ED1C16551" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\System.Numerics.Vectors.xml" />
             </Component>
-            <Component Id="cmp04E7760BC247B05C847A4A6D5D8C7091" Guid="{C807BCE3-C3A3-47E7-923A-3E630D60D595}">
+            <Component Id="cmp04E7760BC247B05C847A4A6D5D8C7091" Guid="{6091470F-1D13-4B03-B825-5E7308753CBE}">
                 <File Id="fil8974B12282083EB6B4CB7BAC26546374" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\System.Runtime.CompilerServices.Unsafe.dll" />
             </Component>
-            <Component Id="cmp4864B1F2B1FABC4A41887066B827E076" Guid="{5AD1D559-0ED7-4398-8DF2-71AA6F13113D}">
+            <Component Id="cmp4864B1F2B1FABC4A41887066B827E076" Guid="{931A36BC-ED7F-447F-B472-0BAEADC96312}">
                 <File Id="fil239BA5789D564910E055C10045DB13A6" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\System.Runtime.CompilerServices.Unsafe.xml" />
             </Component>
-            <Component Id="cmp9DA87BA429922A2AB9A872E6B393B838" Guid="{9D816A91-9DFA-4074-869C-EA58236F3934}">
+            <Component Id="cmp9DA87BA429922A2AB9A872E6B393B838" Guid="{B361C15E-8084-4D4F-A0D5-5932577D4F7D}">
                 <File Id="fil6A8BC02D0E287837DC8027D6A31B1B88" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\System.Threading.Tasks.Extensions.dll" />
             </Component>
-            <Component Id="cmp72FCE36E5ECB5C2AA4401520340A84DA" Guid="{BE46ACAE-115C-4951-A2EA-F673E5D9AE42}">
+            <Component Id="cmp72FCE36E5ECB5C2AA4401520340A84DA" Guid="{3BA2A68B-9267-42D4-9013-2638534D46D7}">
                 <File Id="fil633E45EDF94A090D34C6EB14793DEB00" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Unity.Abstractions.dll" />
             </Component>
-            <Component Id="cmpD524E359AC22836C93AB018D17C3F4C5" Guid="{53A6A231-0D06-4696-8361-97F635F42F0A}">
+            <Component Id="cmpD524E359AC22836C93AB018D17C3F4C5" Guid="{8F37E856-BCD4-4F11-B118-D886A518B05B}">
                 <File Id="fil54FC33B2E4703B580CD9507B6BA9D844" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Unity.Abstractions.pdb" />
             </Component>
-            <Component Id="cmp3656D61E22ED08EE342302F769800354" Guid="{23734150-03B5-4F3C-A86B-C340850D79BB}">
+            <Component Id="cmp3656D61E22ED08EE342302F769800354" Guid="{DCB92367-15EC-4EF3-88C2-085413AC3B6C}">
                 <File Id="fil9BE66553809B1CD4576BCF3D728A3477" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Unity.Container.dll" />
             </Component>
-            <Component Id="cmp9C1655B0BB45050F30DE5E4BE8828E1E" Guid="{CF64BE7A-EA06-425C-A428-BDC371064BB1}">
+            <Component Id="cmp9C1655B0BB45050F30DE5E4BE8828E1E" Guid="{E69DB02C-756F-44C6-AB95-972813724143}">
                 <File Id="fil275EB7067A589CBF7C96A4180CD3B51F" KeyPath="yes" Source="$(var.Dynv6Updater.TargetDir)\Unity.Container.pdb" />
             </Component>
             <Directory Id="dirFE604C5C80BF7D421DB4548896AC527C" Name="Docs" />
