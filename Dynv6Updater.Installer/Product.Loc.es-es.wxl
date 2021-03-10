@@ -3,7 +3,7 @@
 
   <!-- TODO: personalizar para el instalador -->
   <String Id="APPLICATION_NAME">Dynv6Updater</String>
-  <String Id="MANUFACTURER_NAME">David González Zornoza</String>
+  <String Id="MANUFACTURER_NAME">dgzornoza</String>
   <String Id="PRODUCT_DESCRIPTION">Servicio para actualización de IP en Dynv6</String>
   <String Id="COMMENTS">comments</String>
   
