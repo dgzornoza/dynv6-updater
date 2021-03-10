@@ -62,9 +62,9 @@ namespace Dynv6Updater
             this._processInterval = 1000 * 60 * ((string.IsNullOrWhiteSpace(interval)) ? DEFAULT_INTERVAL : Convert.ToInt32(interval));
 
             // log
-            _log.Info($"Servicio configurado para ejecutarse con los siguientes parámetros" +
-                $"Primera ejecución: {this._processStartTime}" +
-                $"Siguientes ejecuciones en intervalos de: {this._processInterval / 60 / 1000} minutos."
+            _log.Info($"Servicio configurado para ejecutarse con los siguientes parámetros: " +
+                $"Primera ejecución: {this._processStartTime}, " +
+                $"Siguientes ejecuciones en intervalos de: {this._processInterval / 60 / 1000} minutos. "
 
                 );
 
@@ -98,8 +98,8 @@ namespace Dynv6Updater
 
 
             // la primera vez que arranca el servicio, se inicia el proceso en la hora especificada de inicio y se guarda el flag
-            // NOTA: si la hora especificada es menor que la hora actual mas el tiempo minimo por defecto, se usa la hora del dia siguiente
-            double interval = (this._processStartTime.TimeOfDay - DateTime.Now.AddMinutes(DEFAULT_FIRST_TIME).TimeOfDay).TotalMinutes;
+            // NOTA: si la hora especificada es menor que la hora actual, se usa la hora del dia siguiente
+            double interval = (this._processStartTime.TimeOfDay - DateTime.Now.TimeOfDay).TotalMinutes;
             _timer.Interval = 1000 * 60 * ((interval < 0) ? (this._processStartTime.TimeOfDay.Add(new TimeSpan(1, 0, 0, 0)) - DateTime.Now.TimeOfDay).TotalMinutes : interval);
             _flagFirstStartTime = true;
 
