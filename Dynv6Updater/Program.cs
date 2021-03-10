@@ -1,4 +1,5 @@
-﻿using Unity;
+﻿using System.ServiceProcess;
+using Unity;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
