@@ -97,11 +97,9 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Dynv6Updater.Services\Dynv6Updater.Services.csproj">
+    <ProjectReference Include="..\..\Dynv6Updater.Services\Dynv6Updater.Services.csproj">
       <Project>{828d91f6-a870-4873-a5bf-ab4562e3fb59}</Project>
       <Name>Dynv6Updater.Services</Name>
     </ProjectReference>
